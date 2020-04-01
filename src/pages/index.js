@@ -1,21 +1,53 @@
 import React from "react"
-import { Link } from "gatsby"
+import { graphql, Link } from "gatsby"
 
 import Layout from "../components/layout"
-import Image from "../components/image"
 import SEO from "../components/seo"
+import "./index.css"
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const Index = ({ data }) => {
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <div>
+        <h4>Total pages: {data.allMarkdownRemark.totalCount}</h4>
+        {data.allMarkdownRemark.edges.map(({ node }) => {
+          return (
+            <div key={node.id}>
+              <Link to={node.fields.slug}>
+                <div className="header">
+                  <h2>{node.frontmatter.title} </h2>
+                  <p>{node.frontmatter.date}</p>
+                </div>
+              </Link>
+              <p>{node.frontmatter.description || node.excerpt}</p>
+            </div>
+          )
+        })}
+      </div>
+    </Layout>
+  )
+}
+export default Index
 
-export default IndexPage
+export const query = graphql`
+  query {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+      totalCount
+      edges {
+        node {
+          id
+          frontmatter {
+            title
+            date(formatString: "DD MMMM, YYYY")
+            description
+          }
+          fields {
+            slug
+          }
+          excerpt(truncate: true)
+        }
+      }
+    }
+  }
+`
