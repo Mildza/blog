@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 
 import "./Post.scss"
 
-const Post = ({ fields, frontmatter, excerpt }) => {
+const Post = ({ data: { fields, frontmatter, excerpt } }) => {
   return (
     <div className="default">
       <Link to={fields.slug}>

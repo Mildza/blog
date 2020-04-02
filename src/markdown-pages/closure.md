@@ -31,14 +31,9 @@ const counter = (function() {
   function changeBy(val) {
     privateCounter += val
   }
-
   return {
     increment: function() {
       changeBy(1)
-    },
-
-    decrement: function() {
-      changeBy(-1)
     },
 
     value: function() {
@@ -46,4 +41,8 @@ const counter = (function() {
     },
   }
 })()
+counter.increment()
+counter.increment()
+console.log(counter.value()) // 2
+console.log(counter.privateCounter) // undefined
 ```
