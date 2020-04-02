@@ -13,7 +13,7 @@ const Index = ({ data }) => {
       <div>
         <h4>Total posts: {data.allMarkdownRemark.totalCount}</h4>
         {data.allMarkdownRemark.edges.map(({ node }) => (
-          <Post key={node.id} data={node} />
+          <Post key={node.id} data={{ ...node }} />
         ))}
       </div>
     </Layout>
