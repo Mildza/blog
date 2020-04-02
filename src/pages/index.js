@@ -1,8 +1,9 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import Post from "./../components/Post"
 import "./index.css"
 
 const Index = ({ data }) => {
@@ -11,20 +12,9 @@ const Index = ({ data }) => {
       <SEO title="Home" />
       <div>
         <h4>Total posts: {data.allMarkdownRemark.totalCount}</h4>
-        {data.allMarkdownRemark.edges.map(({ node }) => {
-          return (
-            <div key={node.id}>
-              <Link to={node.fields.slug}>
-                <div className="header">
-                  <h2>{node.frontmatter.title} </h2>
-                  <p>{node.frontmatter.date}</p>
-                </div>
-                <p>{node.frontmatter.description || node.excerpt}</p>
-              </Link>
-              <hr />
-            </div>
-          )
-        })}
+        {data.allMarkdownRemark.edges.map(({ node }) => (
+          <Post key={node.id} data={(node, excerpt)} />
+        ))}
       </div>
     </Layout>
   )
