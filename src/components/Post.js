@@ -4,15 +4,15 @@ import { Link } from "gatsby"
 
 import "./Post.scss"
 
-const Post = ({ fields, frontmatter, excerpt }) => {
+const Post = ({ data }) => {
   return (
     <div className="default">
-      <Link to={fields.slug}>
+      <Link to={data.fields.slug}>
         <div className="header">
-          <h2>{frontmatter.title} </h2>
-          <p>{frontmatter.date}</p>
+          <h2>{data.frontmatter.title} </h2>
+          <p>{data.frontmatter.date}</p>
         </div>
-        <p>{frontmatter.description || excerpt}</p>
+        <p>{data.frontmatter.description || data.excerpt}</p>
       </Link>
       <hr />
     </div>
