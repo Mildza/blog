@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
         <main>{children}</main>
         <footer
           style={{
-            position: `absolute`,
+            position: `fixed`,
             bottom: `0`,
             left: `50%`,
           }}
@@ -48,7 +48,6 @@ const Layout = ({ children }) => {
             }}
           >
             © {new Date().getFullYear()}, Built with
-            {` `}
             <a href="https://www.gatsbyjs.org">Gatsby</a>
           </div>
         </footer>

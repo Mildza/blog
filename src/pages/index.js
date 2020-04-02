@@ -10,7 +10,7 @@ const Index = ({ data }) => {
     <Layout>
       <SEO title="Home" />
       <div>
-        <h4>Total pages: {data.allMarkdownRemark.totalCount}</h4>
+        <h4>Total posts: {data.allMarkdownRemark.totalCount}</h4>
         {data.allMarkdownRemark.edges.map(({ node }) => {
           return (
             <div key={node.id}>
@@ -19,8 +19,9 @@ const Index = ({ data }) => {
                   <h2>{node.frontmatter.title} </h2>
                   <p>{node.frontmatter.date}</p>
                 </div>
+                <p>{node.frontmatter.description || node.excerpt}</p>
               </Link>
-              <p>{node.frontmatter.description || node.excerpt}</p>
+              <hr />
             </div>
           )
         })}
