@@ -2,11 +2,11 @@ import React from "react"
 
 import { Link } from "gatsby"
 
-import "./Post.scss"
+import "./Post.css"
 
 const Post = ({ data: { fields, frontmatter, excerpt } }) => {
   return (
-    <div className="default">
+    <div>
       <Link to={fields.slug}>
         <div className="header">
           <h2>{frontmatter.title} </h2>
