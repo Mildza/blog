@@ -13,6 +13,7 @@ description: "Vue Best Practice"
    "TheHeading.vue, "TheSidebar.vue"
 5. Child components tightly coupled with their parent should include the parent component name as a prefix. For example, "TodoList.vue" has children "TodoListItem.vue" & "TodoListAddButton.vue".
 6. Component names should start with the highest-level (often most general) words and end with descriptive modifying words.
+7. Component names should always be multi-word, this prevents conflicts with existing and future HTML elements, since all HTML elements are a single word.
 
 ## Codding
 
@@ -23,7 +24,11 @@ description: "Vue Best Practice"
 
 ```javascript
 this.$emit('close-window')
-<popup-window @close-window='handleEvent()' />
+<parrent @close-window='handleEvent()' />
+
+this.$emit('update:title', newTitle)
+<parrent @title.sync='localProperty' />
+
 ```
 
 5. Declare props with camelCase and use kebab-case in templates
@@ -56,9 +61,35 @@ a) Rendering is much more efficient because we don’t loop over every item.
 b) The filtered list will only be re-evaluated when a dependency changes.
 c) It helps separate our component logic from the template, making our component more readable.
 
+7. It’s usually best to use key with v-if + v-else, if they are the same element type (e.g. both <div> elements). That means when switching between elements of the same type, it simply patches the existing element, rather than removing it and adding a new one in its place.
+
+```javascript
+<div v-if="error" key="search-error">
+  Error: {{ error }}
+</div>
+<div v-else key="search-results">{{ results }}</div>
+```
+
 ## Computed
 
+It is better to use computed properties rather than using method invocation for any data changes.
+Computed properties are cached based on their dependencies. A computed property will only re-evaluate when some of its dependencies have changed.
 Complex computed properties should be split into as many simpler properties as possible.
+
+## WATCHERS
+
+Instead of fetching data in created livecycle, we can use watcher with handler() and set property immediate to true.
+
+```javascript
+ watch: {
+    loadData: {
+      immediate: true,
+      handler() {
+        this.fetchList();
+      },
+    },
+  }
+```
 
 ## PROPS
 
@@ -88,17 +119,40 @@ Validate your props with good definitions - It basically saves future you from c
 
 ```javascript
 props: {
-  status: {
-    type: String,
-    required: true,
-    validator: function (value) {
-      return [
-        'ok',
-        'false',
-        'error'
-      ].indexOf(value) !== -1
+   propA: Number,
+    // Multiple possible types
+    propB: [String, Number],
+    // Required string
+    propC: {
+      type: String,
+      required: true
+    },
+    // Number with a default value
+    propD: {
+      type: Number,
+      default: 100
     }
-  }
+    // Props with validators function
+    propE: {
+      type: String,
+      required: true,
+      validator: function (value) {
+        return [
+          'ok',
+          'false',
+          'error'
+        ].indexOf(value) !== -1
+      }
+    },
+  // Object with a default value
+    propB: {
+      type: Object,
+      // Object or array defaults must be returned from a factory function
+      default: function () {
+        return { message: 'hello' }
+      }
+    },
+
 }
 ```
 
@@ -106,10 +160,26 @@ When we want to pass number or boolean we need v-bind to tell Vue that this is a
 
 ```javascript
   <child v-bind:number="42" :isBoolean="false"></child>
-
 ```
 
-## Vuex
+## Functional Component
+
+A functional component is a basically a component that is stateless (meaning no script tag). It only accepts props in order to display data.
+
+```javascript
+<template functional>
+  <h1>{{ props.title }}</h1>
+  <p>{{ props.description }}</p>
+</template>
+```
+
+The benefits of using a Functional Component over a Stateful Component: faster rendering and Lighter memory usage.
+
+## Styling
+
+Element selectors should be avoided with scoped. Prefer class selectors over element selectors in scoped styles, because large numbers of element selectors are slow.
+
+## VUEX
 
 1. As a general rule, data that interacts with the API should be stored in the Vuex store.
 2. Keep all API calls in actions, and those actions then commit to the mutator, and thus to the state, you can ensure that:

@@ -27,7 +27,7 @@ We can achieve normalization converting array to object by using a reduce functi
 
 ```javascript
 const normalized_boxers = boxers.reduce((acc, boxer) => {
-  acc[boxer.id] = user
+  acc[boxer.id] = boxer
   return acc
 }, {})
 ```
